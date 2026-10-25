@@ -80,6 +80,8 @@
     margin:0 0 14px;border-radius:14px;background:var(--cream);
     box-shadow:0 0 0 1px rgba(176,63,160,.08),0 8px 26px rgba(176,63,160,.16);
   }
+  .ig-btn{display:flex;justify-content:center;width:100%;margin:6px 0 14px;font-size:15px;padding:14px 16px;
+    background:linear-gradient(90deg,#F29BE3,#E87ACF 55%,#F5C451);white-space:normal;text-align:center}
   .menu-foot{text-align:center;font-weight:500;font-size:14px;margin-top:8px;opacity:.8}
   .counter{
     position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:6;
@@ -89,14 +91,15 @@
   body.pantalla .counter{display:none}
 
   /* ---------- Panel QR (solo modo pantalla) ---------- */
-  .qr-panel{display:none}
+  .qr-col{display:none}
+  body.pantalla .qr-col{display:flex;flex-direction:column;gap:5vmin;align-items:stretch}
   body.pantalla .qr-panel{
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     text-align:center;
     background:var(--cream);
     border:4px solid var(--pink);
     border-radius:28px;
-    padding:3vmin 3vmin 2.4vmin;
+    padding:2.6vmin 3vmin 2.6vmin;
     box-shadow:0 10px 40px rgba(176,63,160,.22);
     position:relative;
   }
@@ -105,14 +108,19 @@
     font-size:5vmin;color:var(--yellow);
     text-shadow:0 0 0 var(--ink),0 2px 0 rgba(176,63,160,.35);
   }
-  .qr-title{font-weight:700;font-size:4.2vmin;line-height:1.05;letter-spacing:.01em}
+  .qr-title{font-weight:700;font-size:3.6vmin;line-height:1.05;letter-spacing:.01em;
+    display:flex;align-items:center;justify-content:center;gap:1vmin}
+  .qr-title svg{width:3.6vmin;height:3.6vmin;flex:none}
+  .qr-panel.ig{border-color:var(--yellow)}
+  .qr-panel.ig::before{color:var(--pink)}
+  .qr-panel.ig .qr-box{border-color:var(--pink-soft)}
   .qr-sub{font-weight:500;font-size:2.4vmin;margin-top:.6vmin;opacity:.85}
   .qr-box{
-    margin:2.2vmin 0 1.6vmin;
+    margin:1.6vmin 0 0;
     background:#fff;border-radius:18px;padding:1.6vmin;
     border:3px dashed var(--yellow);
   }
-  .qr-box svg{display:block;width:28vmin;height:28vmin}
+  .qr-box svg{display:block;width:23vmin;height:23vmin}
   .qr-hint{font-size:2vmin;font-weight:500;background:var(--yellow);color:var(--ink);
     padding:.6vmin 1.8vmin;border-radius:999px}
 
@@ -122,14 +130,16 @@
   }
   /* iPad vertical: QR flotando abajo a la derecha */
   @media (orientation:portrait){
-    body.pantalla .qr-panel{
+    body.pantalla .qr-col{
       position:fixed;right:2.5vmin;bottom:calc(2.5vmin + env(safe-area-inset-bottom));
-      padding:2vmin 2vmin 1.6vmin;border-radius:22px;
+      flex-direction:row;gap:2vmin;align-items:flex-end;
     }
-    body.pantalla .qr-title{font-size:3vmin}
-    body.pantalla .qr-sub{font-size:1.9vmin}
-    body.pantalla .qr-box{margin:1.4vmin 0 1vmin;padding:1.2vmin}
-    body.pantalla .qr-box svg{width:20vmin;height:20vmin}
+    body.pantalla .qr-panel{padding:2vmin 2vmin 1.8vmin;border-radius:22px}
+    body.pantalla .qr-title{font-size:2.6vmin}
+    body.pantalla .qr-title svg{width:2.6vmin;height:2.6vmin}
+    body.pantalla .qr-sub{font-size:1.8vmin}
+    body.pantalla .qr-box{margin:1.2vmin 0 0;padding:1.2vmin}
+    body.pantalla .qr-box svg{width:17vmin;height:17vmin}
     body.pantalla .qr-hint{display:none}
     body.pantalla .qr-panel::before{font-size:3.6vmin}
   }
@@ -160,6 +170,9 @@
     <img class="page" src="menu/p-6.jpg" alt="Diseños de glitter, página 6" loading="lazy">
     <img class="page" src="menu/p-7.jpg" alt="Diseños de glitter, página 7" loading="lazy">
     <img class="page" src="menu/p-8.jpg" alt="Diseños de glitter, página 8" loading="lazy">
+    <a class="btn ig-btn" href="https://www.instagram.com/greyland.events/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>
+      Síguenos en Instagram @greyland.events</a>
     <p class="menu-foot">Pellizca para hacer zoom · ¡Pregúntanos por tu diseño! 💖</p>
   </div>
   <div class="counter" id="counter">1 / 8</div>
@@ -171,12 +184,18 @@
              disablepictureinpicture disableremoteplayback></video>
     </div>
 
+    <div class="qr-col">
     <aside class="qr-panel" aria-label="Código QR del menú">
-      <div class="qr-title">¡Mira el menú<br>en tu cel!</div>
+      <div class="qr-title">¡Mira el menú en tu cel!</div>
       <div class="qr-sub">Escanea con tu cámara</div>
       <div class="qr-box" id="qr"></div>
-      <div class="qr-hint">✨ Glitter Bar ✨</div>
     </aside>
+    <aside class="qr-panel ig" aria-label="Código QR de Instagram">
+      <div class="qr-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>Síguenos en IG</div>
+      <div class="qr-sub">@greyland.events</div>
+      <div class="qr-box" id="qrIg"></div>
+    </aside>
+    </div>
   </main>
 
   <div class="tap" id="tap"><span>▶ Toca para ver el menú</span></div>
@@ -2527,14 +2546,18 @@ var qrcode = function() {
   // QR que apunta a la MISMA página, pero sin "?pantalla" → la gente solo ve el menú
   // El QR abre menu.html (solo el menú en páginas, nunca el video ni el QR)
   var publicUrl = location.origin + location.pathname.replace(/[^\/]*$/, '') + 'menu.html';
+  var igUrl = 'https://www.instagram.com/greyland.events/';
+  function paintQR(id, url){
+    var qr = qrcode(0, 'M');
+    qr.addData(url);
+    qr.make();
+    document.getElementById(id).innerHTML = qr.createSvgTag({ cellSize: 8, margin: 0, scalable: true });
+    document.querySelectorAll('#' + id + ' svg path').forEach(function(p){ p.setAttribute('fill', '#2B1030'); });
+  }
   function drawQR(){
     if (typeof qrcode === 'undefined') return setTimeout(drawQR, 500);
-    var qr = qrcode(0, 'M');
-    qr.addData(publicUrl);
-    qr.make();
-    document.getElementById('qr').innerHTML = qr.createSvgTag({ cellSize: 8, margin: 0, scalable: true });
-    var svg = document.querySelector('#qr svg');
-    svg.querySelectorAll('path').forEach(function(p){ p.setAttribute('fill', '#2B1030'); });
+    paintQR('qr', publicUrl);
+    paintQR('qrIg', igUrl);
   }
   drawQR();
 
