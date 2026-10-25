@@ -39,6 +39,20 @@
     gap:4vmin;
     padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
+  .headline{display:none}
+  body.pantalla .video-wrap{position:relative}
+  body.pantalla .headline{
+    display:block;position:absolute;z-index:2;
+    top:2.4%;left:50%;transform:translateX(-50%);width:84%;
+    background:var(--cream);border:4px solid var(--pink);border-radius:22px;
+    padding:2.2% 5%;
+    box-shadow:0 8px 24px rgba(176,63,160,.22);
+  }
+  body.pantalla .headline img{display:block;width:100%;height:auto}
+  body.pantalla .headline::after{
+    content:"✦";position:absolute;right:-.45em;top:-.6em;font-size:4.2vmin;color:var(--yellow);
+    text-shadow:0 2px 0 rgba(176,63,160,.35);
+  }
   .video-wrap{
     height:100%;max-width:100%;
     display:flex;align-items:center;justify-content:center;
@@ -69,6 +83,7 @@
     border-bottom:2px solid var(--pink-soft);
   }
   .menu-head h1{font-size:22px;font-weight:700;letter-spacing:.01em;line-height:1}
+  .head-logo{display:block;height:24px;width:auto}
   .menu-head h1 small{display:block;font-size:13px;font-weight:500;opacity:.75;margin-top:4px}
   .btn{
     display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
@@ -205,7 +220,7 @@
   <!-- Lo que ve la gente al escanear el QR -->
   <div class="menu" id="menuPages">
     <header class="menu-head">
-      <h1>✨ Glitter Bar<small>Desliza para ver todo el menú</small></h1>
+      <h1><img class="head-logo" src="glitter-bar-titulo.png" alt="Glitter Bar"><small>Desliza para ver todo el menú</small></h1>
       <a class="btn" href="menu-glitter-bar.pdf" download>⬇ PDF</a>
     </header>
     <img class="page" src="menu/p-1.jpg" alt="Glitter Bar Menú – portada">
@@ -225,6 +240,7 @@
 
   <main class="stage">
     <div class="video-wrap">
+      <div class="headline"><img src="glitter-bar-titulo.png" alt="Glitter Bar"></div>
       <video id="menu" poster="poster.jpg"
              muted loop playsinline webkit-playsinline preload="none"
              disablepictureinpicture disableremoteplayback></video>
