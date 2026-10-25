@@ -124,24 +124,70 @@
   .qr-hint{font-size:2vmin;font-weight:500;background:var(--yellow);color:var(--ink);
     padding:.6vmin 1.8vmin;border-radius:999px}
 
-  /* iPad horizontal: video a la izquierda, QR a la derecha */
-  @media (orientation:landscape){
-    body.pantalla .stage{padding:3vmin}
+  /* ---------- Fotos del evento (solo modo pantalla) ---------- */
+  .fotos{display:none}
+  body.pantalla .fotos{display:flex;flex-direction:column;gap:1.4vmin;min-width:0}
+  .fotos-frame{
+    position:relative;flex:1;min-height:0;overflow:hidden;
+    border-radius:24px;background:#fff;
+    border:4px solid #fff;
+    box-shadow:0 0 0 3px var(--pink),0 10px 40px rgba(176,63,160,.22);
   }
-  /* iPad vertical: QR flotando abajo a la derecha */
-  @media (orientation:portrait){
-    body.pantalla .qr-col{
-      position:fixed;right:2.5vmin;bottom:calc(2.5vmin + env(safe-area-inset-bottom));
-      flex-direction:row;gap:2vmin;align-items:flex-end;
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease}
+  .slide.on{opacity:1}
+  .slide .bg{position:absolute;inset:-30px;background-size:cover;background-position:center;
+    filter:blur(26px) saturate(1.2) brightness(.85);transform:scale(1.1)}
+  .slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+  .slide.on img{animation:kb 9s ease-out both}
+  @keyframes kb{from{transform:scale(1)}to{transform:scale(1.045)}}
+  .fotos-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:4vmin;font-weight:700;font-size:3.2vmin;line-height:1.2;
+    background:repeating-linear-gradient(135deg,var(--cream) 0 18px,#FFF2FB 18px 36px)}
+  .fotos-empty span{font-size:7vmin;margin-bottom:1.5vmin}
+  .fotos-cap{
+    display:flex;align-items:center;justify-content:space-between;gap:1.5vmin;
+    font-weight:700;font-size:2.6vmin;padding:0 .6vmin;
+  }
+  .live{display:inline-flex;align-items:center;gap:.8vmin;background:var(--pink);color:#fff;
+    font-size:1.9vmin;padding:.5vmin 1.4vmin;border-radius:999px;letter-spacing:.06em}
+  .live::before{content:"";width:1.1vmin;height:1.1vmin;border-radius:50%;background:#fff;animation:blink 1.4s infinite}
+  @keyframes blink{50%{opacity:.25}}
+  .dots{display:flex;gap:.7vmin;justify-content:center;flex-wrap:wrap;max-height:2.4vmin;overflow:hidden}
+  .dots i{width:1vmin;height:1vmin;border-radius:50%;background:var(--pink-soft);transition:background .4s}
+  .dots i.on{background:var(--ink)}
+
+  /* iPad horizontal: menú a la izquierda; fotos arriba y QRs abajo a la derecha */
+  @media (orientation:landscape){
+    body.pantalla .stage{
+      display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;
+      gap:2.6vh 3vh;padding:4vh 3.5vh;align-items:stretch;justify-content:stretch;
     }
-    body.pantalla .qr-panel{padding:2vmin 2vmin 1.8vmin;border-radius:22px}
-    body.pantalla .qr-title{font-size:2.6vmin}
-    body.pantalla .qr-title svg{width:2.6vmin;height:2.6vmin}
-    body.pantalla .qr-sub{font-size:1.8vmin}
-    body.pantalla .qr-box{margin:1.2vmin 0 0;padding:1.2vmin}
-    body.pantalla .qr-box svg{width:17vmin;height:17vmin}
-    body.pantalla .qr-hint{display:none}
+    body.pantalla .video-wrap{grid-row:1 / span 2;height:92vh}
+    body.pantalla .fotos{grid-column:2;grid-row:1;min-height:0}
+    body.pantalla .qr-col{grid-column:2;grid-row:2;flex-direction:row;justify-content:center;gap:3vh}
+    body.pantalla .qr-panel{flex:1;max-width:44vh;padding:1.8vmin 1.6vmin 2vmin}
+    body.pantalla .qr-title{font-size:2.5vmin}
+    body.pantalla .qr-title svg{width:2.5vmin;height:2.5vmin}
+    body.pantalla .qr-sub{font-size:1.9vmin}
+    body.pantalla .qr-box{margin-top:1.2vmin;padding:1.2vmin}
+    body.pantalla .qr-box svg{width:19vmin;height:19vmin}
     body.pantalla .qr-panel::before{font-size:3.6vmin}
+  }
+  /* iPad vertical: menú y fotos lado a lado, QRs abajo */
+  @media (orientation:portrait){
+    body.pantalla .stage{
+      display:grid;grid-template-columns:1fr 1fr;align-content:center;justify-content:stretch;
+      gap:3vmin;padding:4vmin;
+    }
+    body.pantalla .video-wrap{height:auto;width:100%}
+    body.pantalla video{width:100%;height:auto}
+    body.pantalla .fotos{height:auto;align-self:stretch}
+    body.pantalla .qr-col{grid-column:1 / span 2;flex-direction:row;justify-content:center;gap:4vmin}
+    body.pantalla .qr-panel{padding:2.2vmin 3vmin;border-radius:24px}
+    body.pantalla .qr-title{font-size:2.8vmin}
+    body.pantalla .qr-title svg{width:2.8vmin;height:2.8vmin}
+    body.pantalla .qr-sub{font-size:2vmin}
+    body.pantalla .qr-box svg{width:22vmin;height:22vmin}
   }
 
   /* Aviso "toca para iniciar" si el navegador bloquea autoplay */
@@ -184,9 +230,17 @@
              disablepictureinpicture disableremoteplayback></video>
     </div>
 
+    <section class="fotos" aria-label="Fotos del evento">
+      <div class="fotos-frame" id="fotosFrame">
+        <div class="fotos-empty" id="fotosEmpty"><span>📸</span>Muy pronto verás aquí<br>las fotos del evento ✨</div>
+      </div>
+      <div class="fotos-cap"><span>Momentos de hoy</span><span class="live">EN VIVO</span></div>
+      <div class="dots" id="dots"></div>
+    </section>
+
     <div class="qr-col">
     <aside class="qr-panel" aria-label="Código QR del menú">
-      <div class="qr-title">¡Mira el menú en tu cel!</div>
+      <div class="qr-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10.5 18.2h3"/></svg>Ve el menú</div>
       <div class="qr-sub">Escanea con tu cámara</div>
       <div class="qr-box" id="qr"></div>
     </aside>
@@ -2560,6 +2614,48 @@ var qrcode = function() {
     paintQR('qrIg', igUrl);
   }
   drawQR();
+
+  // ---------- Fotos del evento en loop ----------
+  // Lee fotos/fotos.json cada 30 s; las fotos nuevas aparecen solas, sin recargar.
+  var frame = document.getElementById('fotosFrame');
+  var emptyBox = document.getElementById('fotosEmpty');
+  var dotsBox = document.getElementById('dots');
+  var fotos = [], slides = [], cur = -1, timer = null, SHOW_MS = 6000;
+
+  function addSlide(name){
+    var url = 'fotos/' + encodeURIComponent(name);
+    var s = document.createElement('div'); s.className = 'slide';
+    var bg = document.createElement('div'); bg.className = 'bg'; bg.style.backgroundImage = 'url("' + url + '")';
+    var img = new Image(); img.alt = 'Foto del evento'; img.decoding = 'async'; img.src = url;
+    s.appendChild(bg); s.appendChild(img); frame.appendChild(s);
+    slides.push(s);
+    var d = document.createElement('i'); dotsBox.appendChild(d);
+  }
+  function show(i){
+    if (!slides.length) return;
+    i = (i + slides.length) % slides.length;
+    slides.forEach(function(s, k){ s.classList.toggle('on', k === i); });
+    dotsBox.querySelectorAll('i').forEach(function(d, k){ d.classList.toggle('on', k === i); });
+    cur = i;
+    clearTimeout(timer);
+    timer = setTimeout(function(){ show(cur + 1); }, SHOW_MS);
+  }
+  function loadFotos(){
+    fetch('fotos/fotos.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function(r){ return r.ok ? r.json() : []; })
+      .then(function(list){
+        if (!Array.isArray(list)) return;
+        var nuevas = list.filter(function(n){ return fotos.indexOf(n) === -1; });
+        if (!nuevas.length) return;
+        var firstNew = slides.length;
+        nuevas.forEach(function(n){ fotos.push(n); addSlide(n); });
+        emptyBox.style.display = 'none';
+        show(firstNew); // la foto más reciente entra de inmediato
+      })
+      .catch(function(){});
+  }
+  loadFotos();
+  setInterval(loadFotos, 30000);
 
   // Que la pantalla no se apague
   var lock = null;
