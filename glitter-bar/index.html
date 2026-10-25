@@ -7,6 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#F7B8EC">
+<meta http-equiv="Cache-Control" content="no-cache">
 <title>Glitter Bar Menú</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2524,7 +2525,8 @@ var qrcode = function() {
   // ---------- Modo pantalla (tu iPad) ----------
 
   // QR que apunta a la MISMA página, pero sin "?pantalla" → la gente solo ve el menú
-  var publicUrl = location.origin + location.pathname;
+  // El QR abre menu.html (solo el menú en páginas, nunca el video ni el QR)
+  var publicUrl = location.origin + location.pathname.replace(/[^\/]*$/, '') + 'menu.html';
   function drawQR(){
     if (typeof qrcode === 'undefined') return setTimeout(drawQR, 500);
     var qr = qrcode(0, 'M');
