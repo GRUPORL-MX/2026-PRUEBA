@@ -164,6 +164,23 @@
     text-align:center;padding:4vmin;font-weight:700;font-size:3.2vmin;line-height:1.2;
     background:repeating-linear-gradient(135deg,var(--cream) 0 18px,#FFF2FB 18px 36px)}
   .fotos-empty span{font-size:7vmin;margin-bottom:1.5vmin}
+  .brand-frame{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.4vmin;
+    background:repeating-linear-gradient(90deg,var(--cream) 0 22px,#FFF1FB 22px 44px);
+    padding:4vmin;
+  }
+  .brand-title{display:block;width:90%;max-height:70%;object-fit:contain;
+    filter:drop-shadow(0 4px 0 rgba(176,63,160,.18));animation:float 5s ease-in-out infinite}
+  @keyframes float{50%{transform:translateY(-1.2%)}}
+  .brand-by{font-weight:700;font-size:3.2vmin;color:var(--ink);letter-spacing:.12em;text-transform:uppercase;
+    background:var(--yellow);padding:.8vmin 3vmin;border-radius:999px}
+  .spark{position:absolute;color:var(--yellow);font-size:6vmin;text-shadow:0 2px 0 rgba(176,63,160,.3);
+    animation:twinkle 2.6s ease-in-out infinite}
+  .spark.s1{top:8%;left:8%}
+  .spark.s2{top:12%;right:9%;font-size:4vmin;color:var(--pink);animation-delay:.8s}
+  .spark.s3{bottom:12%;left:12%;font-size:4.5vmin;color:var(--pink);animation-delay:1.4s}
+  .spark.s4{bottom:9%;right:10%;animation-delay:.4s}
+  @keyframes twinkle{50%{transform:scale(.7) rotate(20deg);opacity:.55}}
   .fotos-cap{
     display:flex;align-items:center;justify-content:space-between;gap:1.5vmin;
     font-weight:700;font-size:2.6vmin;padding:0 .6vmin;
@@ -202,6 +219,8 @@
     body.pantalla .video-wrap{height:auto;width:100%}
     body.pantalla video{width:100%;height:auto}
     body.pantalla .fotos{height:auto;align-self:stretch}
+    body.pantalla .brand-title{width:100%}
+    body.pantalla .brand-frame{padding:3vmin 2.4vmin}
     body.pantalla .qr-col{grid-column:1 / span 2;flex-direction:row;justify-content:center;gap:4vmin}
     body.pantalla .qr-panel{padding:2.2vmin 3vmin;border-radius:24px}
     body.pantalla .qr-title{font-size:4.4vmin}
@@ -252,12 +271,12 @@
              disablepictureinpicture disableremoteplayback></video>
     </div>
 
-    <section class="fotos" aria-label="Fotos del evento">
-      <div class="fotos-frame" id="fotosFrame">
-        <div class="fotos-empty" id="fotosEmpty"><span>📸</span>Muy pronto verás aquí<br>las fotos del evento ✨</div>
+    <section class="fotos brand" aria-label="Glitter Bar">
+      <div class="fotos-frame brand-frame">
+        <span class="spark s1">✦</span><span class="spark s2">✦</span><span class="spark s3">✧</span><span class="spark s4">✦</span>
+        <img class="brand-title" src="glitter-bar-titulo-2l.png" alt="Glitter Bar">
+        <div class="brand-by">by Greyland</div>
       </div>
-      <div class="fotos-cap"><span>Momentos de hoy</span><span class="live">EN VIVO</span></div>
-      <div class="dots" id="dots"></div>
     </section>
 
     <div class="qr-col">
@@ -2636,48 +2655,6 @@ var qrcode = function() {
     paintQR('qrIg', igUrl);
   }
   drawQR();
-
-  // ---------- Fotos del evento en loop ----------
-  // Lee fotos/fotos.json cada 30 s; las fotos nuevas aparecen solas, sin recargar.
-  var frame = document.getElementById('fotosFrame');
-  var emptyBox = document.getElementById('fotosEmpty');
-  var dotsBox = document.getElementById('dots');
-  var fotos = [], slides = [], cur = -1, timer = null, SHOW_MS = 6000;
-
-  function addSlide(name){
-    var url = 'fotos/' + encodeURIComponent(name);
-    var s = document.createElement('div'); s.className = 'slide';
-    var bg = document.createElement('div'); bg.className = 'bg'; bg.style.backgroundImage = 'url("' + url + '")';
-    var img = new Image(); img.alt = 'Foto del evento'; img.decoding = 'async'; img.src = url;
-    s.appendChild(bg); s.appendChild(img); frame.appendChild(s);
-    slides.push(s);
-    var d = document.createElement('i'); dotsBox.appendChild(d);
-  }
-  function show(i){
-    if (!slides.length) return;
-    i = (i + slides.length) % slides.length;
-    slides.forEach(function(s, k){ s.classList.toggle('on', k === i); });
-    dotsBox.querySelectorAll('i').forEach(function(d, k){ d.classList.toggle('on', k === i); });
-    cur = i;
-    clearTimeout(timer);
-    timer = setTimeout(function(){ show(cur + 1); }, SHOW_MS);
-  }
-  function loadFotos(){
-    fetch('fotos/fotos.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function(r){ return r.ok ? r.json() : []; })
-      .then(function(list){
-        if (!Array.isArray(list)) return;
-        var nuevas = list.filter(function(n){ return fotos.indexOf(n) === -1; });
-        if (!nuevas.length) return;
-        var firstNew = slides.length;
-        nuevas.forEach(function(n){ fotos.push(n); addSlide(n); });
-        emptyBox.style.display = 'none';
-        show(firstNew); // la foto más reciente entra de inmediato
-      })
-      .catch(function(){});
-  }
-  loadFotos();
-  setInterval(loadFotos, 30000);
 
   // Que la pantalla no se apague
   var lock = null;
